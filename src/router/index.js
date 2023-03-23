@@ -10,18 +10,8 @@ const routes = [
     name: 'home',
     component: HomeView,
     children:[
-      {
-        path: '/article/ArticleAddNewView.vue',
-        name: '',
 
-        component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleAddNewView.vue')
-      },
-      {
-        path: '/user/UserListView.vue',
-        name: '',
 
-        component: () => import(/* webpackChunkName: "about" */ '../views/user/UserListView.vue')
-      },
     ]
   },
   {
