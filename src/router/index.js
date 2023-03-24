@@ -10,7 +10,24 @@ const routes = [
     name: 'home',
     component: HomeView,
     children:[
+      {
+        path: '/article/ArticleListView.vue',
+        name: 'articleList',
 
+        component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleListView.vue')
+      },
+      {
+        path: '/article/ArticleUpdateView.vue',
+        name: 'articleUpdate',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleUpdateView.vue')
+      },
+      {
+        path: '/article/ArticleAddNewView.vue',
+        name: 'articleAddNewView',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleAddNewView.vue')
+      },
 
     ]
   },
