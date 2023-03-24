@@ -20,7 +20,7 @@
                       :show-overflow-tooltip="true"></el-table-column>
      <el-table-column prop="description" label="文章简述" width="200" header-align="center"
                       :show-overflow-tooltip="true"></el-table-column>
-     <el-table-column prop="categoryName" label="类别" header-align="center"
+     <el-table-column prop="categoryName" label="类别" width="100px" header-align="center"
                       :show-overflow-tooltip="true"></el-table-column>
      <el-table-column prop="viewCount" label="浏览量" width="80" align="center"
                       :show-overflow-tooltip="true"></el-table-column>
