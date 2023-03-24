@@ -8,12 +8,12 @@
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <!--↓↓选择列表↓↓ 用于选择文章板块 size设置框的尺寸 @change是选项变化时触发-->
-          <el-select v-model="value" placeholder="选择文章板块" size="mini" @change="selectArticle(value)">
+          <el-select v-model="options.categoryId" placeholder="选择文章板块" size="mini" @change="selectArticle">
             <el-option
                 v-for="item in options"
-                :key="item.value"
+                :key="item.categoryId"
                 :label="item.label"
-                :value="item.value">
+                :value="item.categoryId">
             </el-option>
           </el-select>
         </el-breadcrumb-item>
@@ -95,19 +95,19 @@ export default {
   data() {
     return {
       options: [{
-        value: 'home',
+        categoryId: 1,
         label: '全部'
       }, {
-        value: '选项2',
+        categoryId: 2,
         label: '肌肉'
       }, {
-        value: '选项3',
+        categoryId: 3,
         label: '器械'
       }, {
-        value: '选项4',
+        categoryId: 4,
         label: '饮食'
       }, {
-        value: '选项5',
+        categoryId: 5,
         label: '资讯'
       }],
       value: '首页',
@@ -208,7 +208,7 @@ export default {
     //选择板块 选择文章
     selectArticle(value){
       //选择选项时传入value值 需要后台有对应方法 得到value的值，并调用相应查询方法
-      let url = 'http://localhost:65535/selectByArticleCateGory';
+      let url = 'http://localhost:65535/selectByArticleCateGory/'+value;
       console.log('url = ' + url,value);
       this.axios
           .create({'headers': {'Authorization': localStorage.getItem('jwt')}})//加上请求头,里面是jwt
