@@ -70,7 +70,7 @@
                 <span>文章发布</span>
               </el-menu-item>
 
-              <el-menu-item index="5-2">
+              <el-menu-item index="/article/ArticleListView.vue">
                 <i class="el-icon-circle-plus"></i>
                 <span>文章列表</span>
               </el-menu-item>
@@ -102,7 +102,12 @@ export default {
 
   },
   mounted() {
-
+    let path = this.$router.currentRoute.path;
+    console.log(path);
+    if (path==('/article/ArticleUpdateView.vue')||path==('/article/ArticleListView.vue')) {
+      path = '/article/ArticleListView.vue';
+    }
+    this.activeMenuItemPath = path;
   }
 }
 </script>
