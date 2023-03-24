@@ -7,26 +7,32 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: '后台管理页面',
     component: HomeView,
     children:[
       {
         path: '/article/ArticleListView.vue',
-        name: 'articleList',
+        name: '文章列表',
 
         component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleListView.vue')
       },
       {
         path: '/article/ArticleUpdateView.vue',
-        name: 'articleUpdate',
+        name: '文章修改',
 
         component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleUpdateView.vue')
       },
       {
         path: '/article/ArticleAddNewView.vue',
-        name: 'articleAddNewView',
+        name: '文章新增',
 
         component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleAddNewView.vue')
+      },
+      {
+        path: '/category/CategoryListView.vue',
+        name: '类别列表',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/category/CategoryListView.vue')
       },
 
     ]

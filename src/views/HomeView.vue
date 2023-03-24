@@ -77,6 +77,24 @@
 
             </el-submenu>
 
+            <!-- 类别管理 -->
+            <el-submenu index="6" >
+              <template slot="title">
+                <i class="el-icon-s-ticket"></i>
+                <span>类别管理</span>
+              </template>
+              <el-menu-item index="/category/CategoryListView.vue">
+                <i class="el-icon-circle-plus"></i>
+                <span>类别列表</span>
+              </el-menu-item>
+
+              <el-menu-item index="/category/CategoryAddNewView.vue">
+                <i class="el-icon-circle-plus"></i>
+                <span>类别添加</span>
+              </el-menu-item>
+
+            </el-submenu>
+
           </el-menu>
         </el-aside>
         <!-- 下半区域的右侧主体 -->

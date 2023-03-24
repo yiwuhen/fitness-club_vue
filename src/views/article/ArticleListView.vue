@@ -4,7 +4,7 @@
     <div>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="font-size: 16px;">
         <el-breadcrumb-item :to="{ path: '/' }">
-          <i class="el-icon-s-promotion"></i> 首页
+          <i class="el-icon-s-promotion"></i> 后台管理
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <!--↓↓选择列表↓↓ 用于选择文章板块 size设置框的尺寸 @change是选项变化时触发-->
@@ -203,6 +203,7 @@ export default {
     },
     //修改编辑,打开新页面
     openUpdateView(article) {
+
       this.$router.push("/article/ArticleUpdateView.vue");
     },
     //选择板块 选择文章
