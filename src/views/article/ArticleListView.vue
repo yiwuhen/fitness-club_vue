@@ -203,8 +203,10 @@ export default {
     },
     //修改编辑,打开新页面
     openUpdateView(article) {
+      console.log("要修改的文章id:"+article.id);
+      this.$router.push("/article/ArticleUpdateView.vue/?id="+article.id);
+      //创建一个存储空间
 
-      this.$router.push("/article/ArticleUpdateView.vue");
     },
     //选择板块 选择文章
     selectArticle(value){

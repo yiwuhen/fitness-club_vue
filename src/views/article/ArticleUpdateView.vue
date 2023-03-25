@@ -57,7 +57,12 @@ export default {
   computed: {},
   watch: {},
   created() {},
-  mounted() {},
+  mounted() {
+    //将转过之后的页面显示,获得层级
+    var item = localStorage.getItem("article");
+    this.formData= item;
+    console.log("您的对象是"+item);
+  },
   methods: {
     submitForm() {
       this.$refs['elForm'].validate(valid => {
