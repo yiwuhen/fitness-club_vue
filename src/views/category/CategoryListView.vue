@@ -12,9 +12,7 @@
 
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
-      <el-table-column prop="name" label="名称" width="180" header-align="center"
-                       :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="keywords" label="关键词列表" header-align="center"
+      <el-table-column prop="name" label="名称"  header-align="center"
                        :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="sort" label="排序序号" width="100" align="center"></el-table-column>
       <el-table-column label="是否启用" width="120" align="center">

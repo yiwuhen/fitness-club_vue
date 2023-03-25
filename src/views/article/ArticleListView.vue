@@ -39,28 +39,28 @@
       <el-table-column prop="sort" label="排序序号" width="80" header-align="center"
                        :show-overflow-tooltip="true"></el-table-column>
 
-      <el-table-column label="是否启用" width="120" align="center">
-        <template slot-scope="scope">
-          <el-switch
-              v-model="scope.row.enable"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#999">
-          </el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否显示在导航栏" width="120" align="center">
-        <template slot-scope="scope">
-          <el-switch
-              v-model="scope.row.isDisplay"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#999">
-          </el-switch>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="是否启用" width="120" align="center">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-switch-->
+<!--              v-model="scope.row.enable"-->
+<!--              :active-value="1"-->
+<!--              :inactive-value="0"-->
+<!--              active-color="#13ce66"-->
+<!--              inactive-color="#999">-->
+<!--          </el-switch>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column label="是否显示在导航栏" width="120" align="center">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-switch-->
+<!--              v-model="scope.row.isDisplay"-->
+<!--              :active-value="1"-->
+<!--              :inactive-value="0"-->
+<!--              active-color="#13ce66"-->
+<!--              inactive-color="#999">-->
+<!--          </el-switch>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <!-- 编辑
@@ -230,6 +230,7 @@ export default {
   mounted() {
     //  初始化加载
     this.initArticleList()
+    //初始化第一层
   }
 }
 </script>

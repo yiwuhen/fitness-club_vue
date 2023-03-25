@@ -34,6 +34,12 @@ const routes = [
 
         component: () => import(/* webpackChunkName: "about" */ '../views/category/CategoryListView.vue')
       },
+      {
+        path: '/category/CategoryAddNewView.vue',
+        name: '类别列表',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/category/CategoryAddNewView')
+      },
 
     ]
   },
