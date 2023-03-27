@@ -70,6 +70,11 @@
                 <span>文章发布</span>
               </el-menu-item>
 
+              <el-menu-item index="/article/ArticleAddNewView-C.vue">
+                <i class="el-icon-circle-plus"></i>
+                <span>文章发布C</span>
+              </el-menu-item>
+
               <el-menu-item index="/article/ArticleListView.vue">
                 <i class="el-icon-circle-plus"></i>
                 <span>文章列表</span>
