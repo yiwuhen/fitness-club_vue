@@ -15,7 +15,7 @@
       <el-table-column prop="name" label="名称"  header-align="center"
                        :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="sort" label="排序序号" width="100" align="center"></el-table-column>
-      <el-table-column label="是否启用" width="120" align="center">
+      <el-table-column label="是否启用"q width="120" align="center">
         <template slot-scope="scope">
           <el-switch
               @change="updateEnable(scope.row)"
@@ -30,6 +30,7 @@
       <el-table-column label="显示在导航栏" width="120" align="center">
         <template slot-scope="scope">
           <el-switch
+              @change="updateDisplay(scope.row)"
               v-model="scope.row.isDisplay"
               :active-value="1"
               :inactive-value="0"
@@ -129,7 +130,7 @@ export default {
         {'url': '/disable', text: '禁用'},
         {'url': '/enable', text: '启用'}
       ];
-      let url = 'http://localhost:9080/categories/'
+      let url = 'http://localhost:10001/articleCategories/'
           + category.id + enableStatus[category.enable].url;
       console.log('url = ' + url);
 
@@ -156,7 +157,7 @@ export default {
       });
     },
     openEditDialog(category) {
-      let url = 'http://localhost:9080/categories/' + category.id;
+      let url = 'http://localhost:10001/articleCategories/list-by-parent' + category.id;
       console.log('url = ' + url);
 
       this.axios
@@ -177,7 +178,7 @@ export default {
       });
     },
     submitEditForm() {
-      let url = 'http://localhost:9080/categories/' + this.editForm.id + '/update';
+      let url = 'http://localhost:10001/articleCategories/' + this.editForm.id + '/update';
       console.log('url = ' + url);
       let formData = this.qs.stringify(this.editForm);
       console.log('formData = ' + formData);
@@ -218,7 +219,7 @@ export default {
       });
     },
     handleDelete(category) {
-      let url = 'http://localhost:9080/categories/' + category.id + '/delete';
+      let url = 'http://localhost:10001/articleCategories/' + category.id + '/delete';
       console.log('url = ' + url);
 
       this.axios
@@ -244,7 +245,7 @@ export default {
       });
     },
     loadCategoryList() {
-      let url = 'http://localhost:9080/categories/list-by-parent?parentId=' + this.currentParentId;
+      let url = 'http://localhost:10001/articleCategories/list-by-parent?parentId=' + this.currentParentId;
       console.log('url = ' + url);
 
       this.axios
@@ -253,7 +254,37 @@ export default {
         let responseBody = response.data;
         this.tableData = responseBody.data;
       });
-    }
+    },
+    updateDisplay(category) {
+      let enableStatus = [
+        {'url': '/hidden', text: '禁用显示'},
+        {'url': '/display', text: '启用显示'}
+      ];
+      let url = 'http://localhost:10001/articleCategories/'
+          + category.id + enableStatus[category.isDisplay].url;
+      console.log('url = ' + url);
+
+      this.axios.post(url).then((response) => {
+        let responseBody = response.data;
+        if (responseBody.state == 20000) {
+          this.$message({
+            message: enableStatus[category.isDisplay].text + '类别成功！',
+            type: 'success'
+          });
+          this.loadCategoryList();
+        } else if (responseBody.state == 40400) {
+          this.$alert(responseBody.message, '警告', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.loadCategoryList();
+            }
+          });
+        } else {
+          this.$messag
+          e.error(responseBody.message);
+        }
+      });
+    },
   },
   mounted() {
     this.loadCategoryList();

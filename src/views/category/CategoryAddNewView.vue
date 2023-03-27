@@ -87,7 +87,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = 'http://localhost:9080/categories/add-new';
+          let url = 'http://localhost:10001/articleCategories/add-new';
           console.log('url = ' + url);
 
           let formData = this.qs.stringify(this.ruleForm);
