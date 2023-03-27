@@ -67,12 +67,6 @@
         <el-form-item label="名称" :label-width="formLabelWidth">
           <el-input v-model="editForm.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="关键词列表" :label-width="formLabelWidth">
-          <el-input v-model="editForm.keywords" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="图标" :label-width="formLabelWidth">
-          <el-input v-model="editForm.icon" autocomplete="off"></el-input>
-        </el-form-item>
         <el-form-item label="排序序号" :label-width="formLabelWidth">
           <el-input v-model="editForm.sort" autocomplete="off"></el-input>
         </el-form-item>
@@ -96,8 +90,6 @@ export default {
       editForm: {
         id: '',
         name: '',
-        keywords: '',
-        icon: '',
         sort: ''
       },
       formLabelWidth: '120px'
@@ -157,7 +149,7 @@ export default {
       });
     },
     openEditDialog(category) {
-      let url = 'http://localhost:10001/articleCategories/list-by-parent' + category.id;
+      let url = 'http://localhost:10001/articleCategories/' + category.id;
       console.log('url = ' + url);
 
       this.axios
