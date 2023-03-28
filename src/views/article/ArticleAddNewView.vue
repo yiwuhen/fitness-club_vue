@@ -115,7 +115,7 @@ export default Vue.extend({//富文本
         } else {
 
           //遍历元素并判断，挨个添加disabled
-          array[i].children = array[i].children.map(obj=>{
+          array= array.map(obj=>{
             if (obj.enable==1){
               obj.disabled=false;
             } else {
@@ -136,21 +136,22 @@ export default Vue.extend({//富文本
       // 输出这个id的值
       console.log("你点击的分类是:" + this.selectById);
       // 你要查询的详细分类的请求url
-      console.log('你点击分类后的请求路径是 = ' + url);
-      this.axios
-          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})//加上请求头,里面是jwt
-          .get(url).then((response) => {
-        let responseBody = response.data;
-        //获取状态
-        console.log('state=' + responseBody.state);
-        //获取后端传来的信息
-        console.log('message=' + responseBody.message);
-        // //将信息赋值给表单数组
-        // this.tableData = responseBody.data;
-        // 将选择的分类赋值给categoryId
-        this.ruleForm.categoryId = this.selectById;
-        console.log('你将选择的分类id：' + this.selectById + '赋值给了categoryId，现在它的值是：' + this.ruleForm.categoryId)
-      });
+      // console.log('你点击分类后的请求路径是 = ' + url);
+      // this.axios
+      //     .create({'headers': {'Authorization': localStorage.getItem('jwt')}})//加上请求头,里面是jwt
+      //     .get(url).then((response) => {
+      //   let responseBody = response.data;
+      //   //获取状态
+      //   console.log('state=' + responseBody.state);
+      //   //获取后端传来的信息
+      //   console.log('message=' + responseBody.message);
+      //   // //将信息赋值给表单数组
+      //   // this.tableData = responseBody.data;
+      //   // 将选择的分类赋值给categoryId
+      //
+      // });
+      this.ruleForm.categoryId = this.selectById;
+      console.log('你将选择的分类id：' + this.selectById + '赋值给了categoryId，现在它的值是：' + this.ruleForm.categoryId)
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
