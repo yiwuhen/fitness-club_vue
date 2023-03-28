@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/' }">
         <i class="el-icon-s-promotion"></i> 后台管理
       </el-breadcrumb-item>
-      <el-breadcrumb-item>文章发布</el-breadcrumb-item>
+      <el-breadcrumb-item>文章修改</el-breadcrumb-item>
     </el-breadcrumb>
     <el-divider></el-divider>
 
@@ -48,7 +48,7 @@
           </div>
         </el-form-item>
         <div style="margin: 30px 0 30px 130px">
-          <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">修改文章</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </div>
       </el-form>
@@ -95,7 +95,7 @@ export default Vue.extend({//富文本
           {min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur'}
         ],
         sort: [
-          {required: true, message: '请输入品牌排序序号', trigger: 'blur'},
+          {required: true, message: '请输入排序序号', trigger: 'blur'},
           {pattern: /^(\d{1}|[1-9]{1}[0-9]?)$/, message: '排序序号必须是0~99之间的数字', trigger: 'blur'}
         ]
       },// 表单规则结束
@@ -163,7 +163,7 @@ export default Vue.extend({//富文本
             let responseBody = response.data;
             if (responseBody.state == 20000) {
               this.$message({
-                message: '添加成功！',
+                message: '文章修改成功！',
                 type: 'success'
               });
               this.resetForm(formName);

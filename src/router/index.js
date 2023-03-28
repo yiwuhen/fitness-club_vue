@@ -24,15 +24,9 @@ const routes = [
       },
       {
         path: '/article/ArticleAddNewView.vue',
-        name: '文章新增',
+        name: '文章发布',
 
         component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleAddNewView.vue')
-      },
-      {
-        path: '/article/ArticleAddNewView-C.vue',
-        name: '文章新增C',
-
-        component: () => import(/* webpackChunkName: "about" */ '../views/article/ArticleAddNewView-C.vue')
       },
       {
         path: '/category/CategoryListView.vue',
