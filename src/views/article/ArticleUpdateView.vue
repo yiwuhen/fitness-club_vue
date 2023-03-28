@@ -152,6 +152,7 @@ export default Vue.extend({//富文本
           console.log('ruleForm.sort = ' + this.ruleForm.sort);
           console.log('ruleForm.content = ' + this.ruleForm.content);
           // 装填category
+          this.ruleForm.categoryId=this.selectById;
 
           let formData = this.qs.stringify(this.ruleForm);
           console.log('formData = ' + formData);
