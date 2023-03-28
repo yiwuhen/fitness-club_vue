@@ -71,8 +71,8 @@ export default Vue.extend({//富文本
         title: '请输入文章标题',
         description: '请输入文章简介',
         sort: 1,
-        content:'',
-        categoryId:''
+        content: '',
+        categoryId: ''
       },//验证表单结束
       selectedOptions: [],
       regionParams: {
@@ -113,6 +113,18 @@ export default Vue.extend({//富文本
         if (array[i].children.length < 1) {
           array[i].children = undefined;
         } else {
+
+          //遍历元素并判断，挨个添加disabled
+          array[i].children = array[i].children.map(obj=>{
+            if (obj.enable==1){
+              obj.disabled=false;
+            } else {
+              obj.disabled=true;
+            }
+            return obj;
+          });
+          //遍历结束
+
           this.getData(array[i].children);
         }
       }
@@ -123,8 +135,6 @@ export default Vue.extend({//富文本
       this.selectById = this.selectedOptions[this.selectedOptions.length - 1];
       // 输出这个id的值
       console.log("你点击的分类是:" + this.selectById);
-      // 根据Id值去查询文章并刷新文章列表
-      let url = 'http://localhost:10001/articles/'+this.selectById+'/list';
       // 你要查询的详细分类的请求url
       console.log('你点击分类后的请求路径是 = ' + url);
       this.axios
@@ -138,8 +148,8 @@ export default Vue.extend({//富文本
         // //将信息赋值给表单数组
         // this.tableData = responseBody.data;
         // 将选择的分类赋值给categoryId
-        this.ruleForm.categoryId=this.selectById;
-        console.log('你将选择的分类id：'+this.selectById+'赋值给了categoryId，现在它的值是：'+this.ruleForm.categoryId)
+        this.ruleForm.categoryId = this.selectById;
+        console.log('你将选择的分类id：' + this.selectById + '赋值给了categoryId，现在它的值是：' + this.ruleForm.categoryId)
       });
     },
     submitForm(formName) {
@@ -148,7 +158,7 @@ export default Vue.extend({//富文本
           let url = 'http://localhost:10001/articles/add-new';//别忘了这里换提交的地址
           console.log('url = ' + url);
           //装填WangEditor的内容到Content
-          this.ruleForm.content=this.editor.getHtml();
+          this.ruleForm.content = this.editor.getHtml();
           console.log('ruleForm.title = ' + this.ruleForm.title);
           console.log('ruleForm.description = ' + this.ruleForm.description);
           console.log('ruleForm.sort = ' + this.ruleForm.sort);
@@ -187,16 +197,14 @@ export default Vue.extend({//富文本
     }
   },
   mounted() {
-      //向后端发送请求(没有jwt验证)
-      let url = "http://localhost:10001/articleCategories/list-children-by-parent";
-      this.axios.get(url).then((response) => {
-        let responseBody = response.data;
-
-        var categories = this.getData(responseBody.data);
-        this.options = categories;
-        console.log(this.options);
-
-      })
+    //向后端发送请求(没有jwt验证)
+    let url = "http://localhost:10001/articleCategories/list-children-by-parent";
+    this.axios.get(url).then((response) => {
+      let responseBody = response.data;
+      var categories = this.getData(responseBody.data);
+      this.options = categories;
+      console.log(this.options);
+    })
   },
   beforeDestroy() {//富文本
     const editor = this.editor
