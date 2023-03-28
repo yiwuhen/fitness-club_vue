@@ -232,7 +232,7 @@ export default {
   },
   mounted() {
     //向后端发送请求(没有jwt验证)
-    let url = "http://localhost:10001//articleCategories/list-children-by-parent";
+    let url = "http://localhost:10001/articleCategories/list-children-by-parent";
     this.axios.get(url).then((response) => {
       let responseBody = response.data;
 

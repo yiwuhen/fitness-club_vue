@@ -4,78 +4,230 @@
       <el-breadcrumb-item :to="{ path: '/' }">
         <i class="el-icon-s-promotion"></i> 后台管理
       </el-breadcrumb-item>
-      <el-breadcrumb-item>文章列表</el-breadcrumb-item>
-      <el-breadcrumb-item>修改文章</el-breadcrumb-item>
+      <el-breadcrumb-item>文章发布</el-breadcrumb-item>
     </el-breadcrumb>
     <el-divider></el-divider>
-   <!-- 添加表单-->
 
-        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px"
-                 label-position="top">
-          <el-form-item label="文章标题" prop="title">
-            <el-input v-model="formData.title" placeholder="请输入文章标题" clearable :style="{width: '100%'}">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="文章描述" prop="description">
-            <el-input v-model="formData.description" type="textarea" placeholder="请输入文章描述" show-word-limit
-                      :autosize="{minRows: 4, maxRows: 5}" :style="{width: '100%'}"></el-input>
-          </el-form-item>
-          <el-form-item size="large">
-            <el-button type="primary" @click="submitForm">提交</el-button>
-            <el-button @click="resetForm">重置</el-button>
-          </el-form-item>
-        </el-form>
-
+    <div>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="130px" class="demo-ruleForm">
+        <el-form-item label="文章标题" prop="title">
+          <el-input v-model="ruleForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="文章简介" prop="description">
+          <el-input v-model="ruleForm.description"></el-input>
+        </el-form-item>
+        <el-form-item label="文章分类" prop="categoryId">
+          <!--↓↓超级牛逼的级联选择器↓↓-->
+          <el-cascader
+              v-model="selectedOptions"
+              :options="options"
+              :props="regionParams"
+              @change="handleChange">
+          </el-cascader>
+          <!--↑↑超级牛逼的级联选择器↑↑-->
+        </el-form-item>
+        <el-form-item label="排序序号" prop="sort">
+          <el-input v-model="ruleForm.sort"></el-input>
+        </el-form-item>
+        <el-form-item label="文章正文" prop="content">
+          <div style="border: 1px solid lightgrey;border-radius: 3px">
+            <Toolbar
+                style="border-bottom: 1px solid #ccc"
+                prop="content"
+                :editor="editor"
+                :defaultConfig="toolbarConfig"
+                :mode="mode"
+            />
+            <Editor
+                style="height: 500px; overflow-y: hidden;"
+                v-model="html"
+                :defaultConfig="editorConfig"
+                :mode="mode"
+                @onCreated="onCreated"
+            />
+          </div>
+        </el-form-item>
+        <div style="margin: 30px 0 30px 130px">
+          <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </div>
+      </el-form>
+    </div>
 
   </div>
 </template>
-
 <script>
-export default {
-  components: {},
-  props: [],
+
+import Vue from 'vue' //富文本
+import {Editor, Toolbar} from '@wangeditor/editor-for-vue' //富文本
+
+export default Vue.extend({//富文本
+  components: {Editor, Toolbar},//富文本
   data() {
     return {
-      formData: {
-        title: undefined,
-        description: undefined,
+      // 验证表单
+      ruleForm: {
+        title: '',
+        description: '',
+        sort: 1,
+        content:'',
+        categoryId:''
+      },//验证表单结束
+
+      // 级联选择器
+      selectedOptions: [],
+      options: [],
+      regionParams: {
+        label: 'name', //这里可以配置你们后端返回的属性
+        value: 'id',
+        children: 'children',
+        expandTrigger: 'hover',
       },
+
+      // 表单验证规则
       rules: {
-        title: [{
-          required: true,
-          message: '请输入文章标题',
-          trigger: 'blur'
-        }],
-        description: [{
-          required: true,
-          message: '请输入文章描述',
-          trigger: 'blur'
-        }],
-      },
-    }
-  },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {
-    //将转过之后的页面显示,获得层级
-    var item = localStorage.getItem("article");
-    this.formData= item;
-    console.log("您的对象是"+item);
+        title: [
+          {required: true, message: '请输入文章标题', trigger: 'blur'},
+          {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
+        ],
+        description: [
+          {required: true, message: '请输入文章简介', trigger: 'blur'},
+          {min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur'}
+        ],
+        sort: [
+          {required: true, message: '请输入品牌排序序号', trigger: 'blur'},
+          {pattern: /^(\d{1}|[1-9]{1}[0-9]?)$/, message: '排序序号必须是0~99之间的数字', trigger: 'blur'}
+        ]
+      },// 表单规则结束
+      editor: null,//富文本
+      html: '',//正文是html格式
+      toolbarConfig: {},//富文本
+      editorConfig: {placeholder: '请输入内容...'},//富文本
+      mode: 'default' //富文本 or 'simple'
+    }//return 结束
   },
   methods: {
-    submitForm() {
-      this.$refs['elForm'].validate(valid => {
-        if (!valid) return
-        // TODO 提交表单
-      })
+    //得到Json对象数据
+    getData(array) {
+      for (var i = 0; i < array.length; i++) {
+        if (array[i].children.length < 1) {
+          array[i].children = undefined;
+        } else {
+          this.getData(array[i].children);
+        }
+      }
+      return array;
     },
-    resetForm() {
-      this.$refs['elForm'].resetFields()
+    handleChange() {// 级联选择器方法
+      // 级联列表返回来的是一个数组,需要的是最后一个值,代表最后一层的id值
+      this.selectById = this.selectedOptions[this.selectedOptions.length - 1];
+      // 输出这个id的值
+      console.log("你点击的分类是:" + this.selectById);
+      // 根据Id值去查询文章并刷新文章列表
+      let url = 'http://localhost:10001/articles/'+this.$route.query.id+'/list';
+      // 你要查询的详细分类的请求url
+      console.log('你修改文章的请求路径是 = ' + url);
+      this.axios
+          .create({'headers': {'Authorization': localStorage.getItem('jwt')}})//加上请求头,里面是jwt
+          .get(url).then((response) => {
+        let responseBody = response.data;
+        //获取状态
+        console.log('state=' + responseBody.state);
+        //获取后端传来的信息
+        console.log('message=' + responseBody.message);
+        //将信息赋值给表单数组
+        this.tableData = responseBody.data;
+      });
     },
-  }
-}
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let url = 'http://localhost:10001/articles/'+this.$route.query.id+'/update';//别忘了这里换提交的地址
+          console.log('装填id后的url请求路径为 = ' + url);
 
+          // 装填WangEditor的内容到Content
+          this.ruleForm.content=this.editor.getHtml();
+          console.log('ruleForm.title = ' + this.ruleForm.title);
+          console.log('ruleForm.description = ' + this.ruleForm.description);
+          console.log('ruleForm.sort = ' + this.ruleForm.sort);
+          console.log('ruleForm.content = ' + this.ruleForm.content);
+          // 装填category
+
+          let formData = this.qs.stringify(this.ruleForm);
+          console.log('formData = ' + formData);
+
+          this.axios
+              .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+              .post(url, formData).then((response) => {
+            let responseBody = response.data;
+            if (responseBody.state == 20000) {
+              this.$message({
+                message: '添加成功！',
+                type: 'success'
+              });
+              this.resetForm(formName);
+            } else {
+              this.$message.error(responseBody.message);
+            }
+          });
+        } else {
+          alert('error submit!!');
+          return false;
+        }
+      });
+    },
+    onCreated(editor) {//富文本
+      this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+
+    },
+    resetForm(formName) { //重置
+      this.$refs[formName].resetFields(); // 重置element ui组件内的信息
+      this.editor.setHtml('');
+    }
+  },
+  mounted() {
+    // 拿到上个页面传过来的id
+    let articleId = this.$route.query.id;
+    console.log(articleId);
+
+    // 设置请求路径
+    let oldArticleUrl = "http://localhost:10001/articles/"+articleId;
+    // 发送请求获取数据
+    this.axios.get(oldArticleUrl).then((response) => {
+      // 声明一个参数用来接收Json对象
+      let responseBody = response.data;
+      var oldArticle = this.getData(responseBody.data);
+      // 将Json对象的值赋给ruleForm
+      this.ruleForm = oldArticle;
+      // 将ruleForm的content赋值给editor正文
+      this.editor.setHtml(this.ruleForm.content);
+      console.log(
+          '从所选页面拿到的标题：'+ this.ruleForm.title,
+          '从所选页面拿到的简介：'+ this.ruleForm.description,
+          '从所选页面拿到的序号：'+ this.ruleForm.sort,
+          '从所选页面拿到的正文：'+ this.ruleForm.content
+      )
+    })
+
+    //向后端发送请求(没有jwt验证)
+    let url = "http://localhost:10001/articleCategories/list-children-by-parent";
+    this.axios.get(url).then((response) => {
+      let responseBody = response.data;
+
+      var categories = this.getData(responseBody.data);
+      this.options = categories;
+      console.log(this.options);
+
+    })
+  },
+  beforeDestroy() {//富文本
+    const editor = this.editor
+    if (editor == null) return
+    editor.destroy() // 组件销毁时，及时销毁编辑器
+  }
+})
 </script>
-<style>
+<style src="@wangeditor/editor/dist/css/style.css"></style><!--富文本编辑器css样式-->
+<style scoped>
+
 </style>
