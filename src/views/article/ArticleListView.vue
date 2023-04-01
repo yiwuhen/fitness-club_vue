@@ -157,10 +157,10 @@ export default {
         this.tableData = responseBody.data;
       });
     },
-    //删除列表的提示框
+    //删除列表 的 提示框
     openDeleteConfirm(article) {
       //弹框提示信息
-      let message = '此操作将永久删除【' + article.title + '】管理员，是否继续？';
+      let message = '此操作将永久删除【' + article.title + '】文章，是否继续？';
 
       this.$confirm(message, '提示', {
         confirmButtonText: '确定',
@@ -206,10 +206,15 @@ export default {
     },
     //修改编辑,打开新页面
     openUpdateView(article) {
-      console.log("要修改的文章id:" + article.id);
-      this.$router.push("/article/ArticleUpdateView.vue/?id=" + article.id);
-      //创建一个存储空间
+      //TODO 尝试一个新方法，如果新方法失败，请恢复下面两行代码
+      // console.log("要修改的文章是："+JSON.stringify(article)+"，它的id是：" + article.id);
+      // this.$router.push("/article/ArticleUpdateView.vue/?id=" + article.id);
 
+      //将用户点击的article对象全部push到修改页面
+      this.$router.push({
+        path: '/article/ArticleUpdateView.vue',
+        query: { article: JSON.stringify(article) }
+      });
     },
     //选择板块 选择文章
     selectArticle(value) {
