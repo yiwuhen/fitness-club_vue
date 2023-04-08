@@ -95,7 +95,7 @@
 export default {
   data() {
     return {
-      selectById:'',
+      selectById: '',
       selectedOptions: [],
       regionParams: {
         label: 'name', //这里可以配置你们后端返回的属性
@@ -124,7 +124,7 @@ export default {
       // 输出这个id的值
       console.log("你点击的分类是:" + this.selectById);
       // 根据Id值去查询文章并刷新文章列表
-      let url = 'http://localhost:10001/articles/'+this.selectById+'/list';
+      let url = 'http://localhost:10001/articles/' + this.selectById + '/list';
       // 你要查询的详细分类的请求url
       console.log('你点击分类后的请求路径是 = ' + url);
       this.axios
@@ -213,7 +213,9 @@ export default {
       //将用户点击的article对象全部push到修改页面
       this.$router.push({
         path: '/article/ArticleUpdateView.vue',
-        query: { article: JSON.stringify(article) }
+        query: {
+          article: JSON.stringify(article)
+        }
       });
     },
     //选择板块 选择文章
