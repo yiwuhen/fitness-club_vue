@@ -120,7 +120,7 @@ export default Vue.extend({
         isCover: 0,
         sort: undefined
       },
-      exArticleId:null,
+      exArticleId: null,
 
       dialogImageUrl: '',// 封面上传-预览组件中的图片url
       dialogVisible: false,// 封面上传-预览组件的可见性，false为不显示
@@ -215,7 +215,7 @@ export default Vue.extend({
     handleRemove(file, fileList) {// 封面上传组件的删除方法
       console.log("【删除方法】点击了删除按钮，传入file和fileList：", file, fileList);
       let url = "http://localhost:10001/articlePictures/deleteCoverByIsDelDB"; //删除文件时的请求路径
-      console.log("【删除方法】请求路径是：",url);
+      console.log("【删除方法】请求路径是：", url);
       // 定义一个DTO提交到后端
       const ArticlePictureDeleteCoverDTO = {
         id: undefined,
@@ -231,13 +231,13 @@ export default Vue.extend({
       ArticlePictureDeleteCoverDTO.id = null;
       ArticlePictureDeleteCoverDTO.articleId = this.exArticleId;
       ArticlePictureDeleteCoverDTO.url = file.url;
-      console.log("【删除方法】DTO装填完毕：",ArticlePictureDeleteCoverDTO);
+      console.log("【删除方法】DTO装填完毕：", ArticlePictureDeleteCoverDTO);
       this.axios
           .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-          .post(url,ArticlePictureDeleteCoverDTO).then((response) => {
+          .post(url, ArticlePictureDeleteCoverDTO).then((response) => {
         let responseBody = response.data;
         if (responseBody.state == 20000) {
-          this.fileList.splice(0,1);
+          this.fileList.splice(0, 1);
           this.$message({
             message: '封面图片删除成功！',
             type: 'success'
@@ -262,12 +262,12 @@ export default Vue.extend({
 
     handleSuccess(response, file, fileList) { // 封面上传成功时触发的方法
       let url = "http://localhost:10001/img/" + response.data;
-      console.log("【上传图片】上传COVER请求的路径是：",url);
+      console.log("【上传图片】上传COVER请求的路径是：", url);
       file.url = url;
       //将有url赋值给文件的url
       this.file.url = file.url;
       this.file.isCover = 1;
-      this.file.articleId=this.exArticleId;
+      this.file.articleId = this.exArticleId;
       console.log("【上传封面】图像列表:", fileList);
       this.fileList = fileList;
       console.log(this.fileList.length);
@@ -278,13 +278,13 @@ export default Vue.extend({
       if (image == null) return
       const {src, alt, url, href} = image
       this.ContentImg.push(image)
-      console.log("【富文本编辑器】ContentImg:", this.ContentImg);
-      console.log('【富文本编辑器】Inserted Image：', src, alt, url, href)
+      console.log("【富文本编辑器】插入的所有图片的数组:", this.ContentImg);
+      console.log('【富文本编辑器】你插入的图片的属性是：', image)
     },
 
     onChange(editor) { // 富文本编辑器-文本框监听
-      console.log("onChange", this.editor.getHtml());
-      console.log("获得当前的图片:", this.editor.getElemsByType('image'));
+      console.log("【富文本编辑器】富文本框内的所有内容：", this.editor.getHtml());
+      console.log("【富文本编辑器】富文本框内的图片数组：", this.editor.getElemsByType('image'));
     },
 
     handleImageUpload(result) { // 富文本编辑器-上传图片
@@ -377,19 +377,19 @@ export default Vue.extend({
 
           // 装填WangEditor的内容到Content
           this.ruleForm.content = this.editor.getHtml();
-          console.log('【发布文章】ruleForm.title = ',this.ruleForm.title);
-          console.log('【发布文章】ruleForm.description = ',this.ruleForm.description);
-          console.log('【发布文章】ruleForm.sort = ',this.ruleForm.sort);
-          console.log('【发布文章】ruleForm.content = ',this.ruleForm.content);
+          console.log('【发布文章】ruleForm.title = ', this.ruleForm.title);
+          console.log('【发布文章】ruleForm.description = ', this.ruleForm.description);
+          console.log('【发布文章】ruleForm.sort = ', this.ruleForm.sort);
+          console.log('【发布文章】ruleForm.content = ', this.ruleForm.content);
           // 装填categoryId
           this.ruleForm.categoryId = this.selectById;
 
           let formData = this.qs.stringify(this.ruleForm);
-          console.log('【发布文章】formData = ',formData);
+          console.log('【发布文章】formData = ', formData);
 
           this.axios
               .create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-              .post(url,formData).then((response) => {
+              .post(url, formData).then((response) => {
             let responseBody = response.data;
             if (responseBody.state == 20000) {
               //图片发送异步请求
@@ -397,21 +397,21 @@ export default Vue.extend({
               let pictureURI = "http://localhost:10001/articlePictures/add-new" //
               let fileData = this.qs.stringify(this.file);
               console.log("【发布文章】图片的信息是:" + fileData);
-              let ArticlePictureAddNewDTO ={
+              let ArticlePictureAddNewDTO = {
                 articleId: null,
                 url: undefined,
                 isCover: 1,
-                description:undefined,
+                description: undefined,
                 width: undefined,
                 height: undefined,
-                sort:undefined
+                sort: undefined
               }
               // 取出上个页面传来的信息
               // const article = JSON.parse(this.$route.query.article);
-              console.log("【发布文章】即将通过",this.fileList,"的",this.fileList.url,"给DTO赋值")
-              ArticlePictureAddNewDTO.articleId=this.exArticleId;
-              ArticlePictureAddNewDTO.url=this.file.url;
-              console.log("【发布文章】DTO的信息是：",ArticlePictureAddNewDTO)
+              console.log("【发布文章】即将通过", this.fileList, "的", this.fileList.url, "给DTO赋值")
+              ArticlePictureAddNewDTO.articleId = this.exArticleId;
+              ArticlePictureAddNewDTO.url = this.file.url;
+              console.log("【发布文章】DTO的信息是：", ArticlePictureAddNewDTO)
 
               this.axios.post(pictureURI, fileData).then((response) => {
                 let FileResponseData = response.data;
@@ -451,15 +451,11 @@ export default Vue.extend({
   },
 
   mounted() {
-    //TODO 在尝试一个很新的东西，如果炸了，恢复下面两段代码
-    // 拿到上个页面传过来的id
-    // let articleId = this.$route.query.id;
-    // console.log(articleId);
-
+    // 加载文章
     const article = JSON.parse(this.$route.query.article);
     console.log("【预加载】传过来的文章是：", article);
-    this.exArticleId=article.id;
-    console.log("【预加载】传过来的文章id是：",this.exArticleId);
+    this.exArticleId = article.id;
+    console.log("【预加载】传过来的文章id是：", this.exArticleId);
 
     // 设置请求路径 TODO
     // let oldArticleUrl = "http://localhost:10001/articles/"+articleId;
@@ -468,32 +464,56 @@ export default Vue.extend({
     this.axios.get(oldArticleUrl).then((response) => {
       // 声明一个参数用来接收Json对象
       let responseBody = response.data;
-      var oldArticle = this.getData(responseBody.data);
+
+      // 接收articleStandardVO对象
+      const articleStandardVO = responseBody.data.articleStandardVO;
+      console.log("【预加载】articleStandardVO：",articleStandardVO)
+
+      // 接收oldContentImg对象
+      const oldContentImg =responseBody.data.oldContentImg;
+      console.log("【预加载】oldContentImg：",oldContentImg)
+
+      // 取出articleStandardVO对象的各个参数赋值给表单
+      var oldArticle = this.getData(articleStandardVO);
+      console.log("【预加载】oldArticle：",oldArticle)
       // 将Json对象的值赋给ruleForm
       this.ruleForm = oldArticle;
       // 将ruleForm的content赋值给editor正文
       this.editor.setHtml(this.ruleForm.content);
+      let ruleFormm = JSON.stringify(this.ruleForm);
       console.log(
-          '【预加载】从所选页面拿到的标题：' + this.ruleForm.title + '\n' +
-          '【预加载】从所选页面拿到的简介：' + this.ruleForm.description + '\n' +
-          '【预加载】从所选页面拿到的序号：' + this.ruleForm.sort + '\n' +
-          '【预加载】从所选页面拿到的正文：' + this.ruleForm.content
+          '【预加载】从服务器拿到的ruleForm：' + ruleFormm + '\n' +
+          '【预加载】从服务器拿到的标题：' + this.ruleForm.title + '\n' +
+          '【预加载】从服务器拿到的简介：' + this.ruleForm.description + '\n' +
+          '【预加载】从服务器拿到的序号：' + this.ruleForm.sort + '\n' +
+          '【预加载】从服务器拿到的正文：' + this.ruleForm.content
       )
+
+      // 取出oldContentImg对象的各个参数赋值给ContentImg
+
+        console.log("【预加载】如果你看到这条消息，说明OldContentImg!=0")
+
+        // oldContentImg.forEach(item =>{
+        //   let url = item.src
+        //   console.log("【预加载】取出oldContentImg的src：",url)
+        //   const image={src:item.src, alt:undefined, url:item.url, href:undefined}
+        //   this.ContentImg.push(image)
+        // })
+        const contentImgArray = oldContentImg;
+
+        contentImgArray.forEach(innerArray => {
+          innerArray.forEach(obj => {
+            if (obj && obj.src) {
+              const image = { src: obj.src, alt: undefined, url: obj.src, href: undefined };
+              this.ContentImg.push(image);
+            }
+          });
+        });
+        console.log("【预加载】ContentImg初始化完毕：",this.ContentImg)
+
     })
-
+    // 加载封面
     let getCoverUrl = "http://localhost:10001/articlePictures/" + this.exArticleId + "/cover";//url的地址根据项目实际需要，info.photo=>图片路径,this.baseUrl=>上传的网络地址
-    // this.axios.get(getCoverUrl).then((response) => {
-    //   console.log("【预加载】得到图片回传response：", response)
-    //   let coverResponseBody = response.data
-    //   var coverData = this.getData(coverResponseBody.data) //TODO 这里可能没取出来
-    //   console.log("【预加载】得到图片回传response.data：", coverData)
-    //   this.fileList = [];
-    //   this.fileList.push({
-    //     'url': coverData.url
-    //   })
-    //   console.log("【预加载】赋值给fileList后：", this.fileList)
-    // })
-
     this.axios.get(getCoverUrl).then((response) => {
       console.log("【预加载】得到图片回传response：", response)
       let coverResponseBody = response.data
@@ -512,9 +532,9 @@ export default Vue.extend({
     })
 
 
-    //向后端发送请求(没有jwt验证)
-    let url = "http://localhost:10001/articleCategories/list-children-by-parent";
-    this.axios.get(url).then((response) => {
+    // 加载类别 向后端发送请求(没有jwt验证)
+    let getCategoryUrl = "http://localhost:10001/articleCategories/list-children-by-parent";
+    this.axios.get(getCategoryUrl).then((response) => {
       let responseBody = response.data;
 
       var categories = this.getData(responseBody.data);
@@ -522,8 +542,6 @@ export default Vue.extend({
       console.log(this.options);
 
     })
-
-
   },
 
   beforeDestroy() {// 富文本编辑器
