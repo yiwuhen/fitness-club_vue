@@ -146,7 +146,7 @@ export default Vue.extend({
       rules: {
         title: [
           {required: true, message: '请输入文章标题', trigger: 'blur'},
-          {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
+          {min: 1, max: 30, message: '长度在 2 到 15 个字符', trigger: 'blur'}
         ],
         //TODO 级联选择器的表单验证有问题 未解决
         selectedOptions: [
@@ -154,7 +154,7 @@ export default Vue.extend({
         ],
         description: [
           {required: true, message: '请输入文章简介', trigger: 'blur'},
-          {min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur'}
+          {min: 1, max: 300, message: '长度在 2 到 30 个字符', trigger: 'blur'}
         ],
         sort: [
           {required: true, message: '请输入排序序号', trigger: 'blur'},
@@ -413,7 +413,8 @@ export default Vue.extend({
               ArticlePictureAddNewDTO.url = this.file.url;
               console.log("【发布文章】DTO的信息是：", ArticlePictureAddNewDTO)
 
-              this.axios.post(pictureURI, fileData).then((response) => {
+              this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+                  .post(pictureURI, fileData).then((response) => {
                 let FileResponseData = response.data;
                 console.log("【发布文章】返回的消息是:" + FileResponseData.state)
               })
@@ -421,21 +422,21 @@ export default Vue.extend({
               // 提交“删除前端瞎几把给服务器上传多余的图片”请求
               let delImgUrl = "http://localhost:10001/articlePictures/deleteUnnecessaryPic";
               console.log("【发布文章】删除多余图片的请求路径：" + delImgUrl)
-              this.axios.post(delImgUrl, this.ContentImg).then((response) => {
+              this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+                  .post(delImgUrl, this.ContentImg).then((response) => {
                 let delImgUrlResponseData = response.data;
                 console.log("【发布文章】提交了删除多余图片的请求，返回的消息是：" + delImgUrlResponseData) //TODO
               })
 
               this.$message({
-                message: '文章修改成功！即将刷新页面！',
+                message: '文章修改成功！',
                 type: 'success'
               });
               this.resetForm(formName);
 
-              // // 延迟2秒后刷新页面
-              // setTimeout(() => {
-              //   location.href = "/article/ArticleListView.vue";
-              // }, 2000);
+              setTimeout(() => {
+                this.$router.push('/article/ArticleListView.vue');
+              }, 1000);
 
             } else {
               this.$message.error(responseBody.message);
@@ -461,7 +462,8 @@ export default Vue.extend({
     // let oldArticleUrl = "http://localhost:10001/articles/"+articleId;
     let oldArticleUrl = "http://localhost:10001/articles/" + this.exArticleId;
     // 发送请求获取数据
-    this.axios.get(oldArticleUrl).then((response) => {
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(oldArticleUrl).then((response) => {
       // 声明一个参数用来接收Json对象
       let responseBody = response.data;
 
@@ -514,7 +516,8 @@ export default Vue.extend({
     })
     // 加载封面
     let getCoverUrl = "http://localhost:10001/articlePictures/" + this.exArticleId + "/cover";//url的地址根据项目实际需要，info.photo=>图片路径,this.baseUrl=>上传的网络地址
-    this.axios.get(getCoverUrl).then((response) => {
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(getCoverUrl).then((response) => {
       console.log("【预加载】得到图片回传response：", response)
       let coverResponseBody = response.data
       if (coverResponseBody.state === 40400) {
@@ -532,9 +535,10 @@ export default Vue.extend({
     })
 
 
-    // 加载类别 向后端发送请求(没有jwt验证)
+    // 加载类别 向后端发送请求
     let getCategoryUrl = "http://localhost:10001/articleCategories/list-children-by-parent";
-    this.axios.get(getCategoryUrl).then((response) => {
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(getCategoryUrl).then((response) => {
       let responseBody = response.data;
 
       var categories = this.getData(responseBody.data);

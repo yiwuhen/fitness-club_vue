@@ -64,7 +64,7 @@ export default {
         ],
         name: [
           {required: true, message: '请输入类别名称', trigger: 'blur'},
-          {min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur'}
+          {min: 1, max: 20, message: '长度在 1 到 8 个字符', trigger: 'blur'}
         ],
         // ↓↓暂时用不上↓↓
         /*keywords: [
@@ -109,7 +109,8 @@ export default {
               this.$message({
                 showClose: true,
                 message: responseBody.message,
-                type: 'error'
+                type: 'error',
+
               });
             }
           });

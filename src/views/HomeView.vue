@@ -4,7 +4,10 @@
     <el-container>
       <!-- 上半区域：顶栏 -->
       <el-header class="layout-header">
-        <h1>健身吧后台管理</h1>
+        <h1>健身吧后台管理
+        <span v-if="isLogin" style="float: right" @click="logOut">退出登录</span>
+          <span v-else style="float: right"><router-link to="/login">登录</router-link></span>
+        </h1>
       </el-header>
       <!-- 下半区域 -->
       <el-container class="layout-body">
@@ -53,14 +56,14 @@
 
 
             <!-- 订单管理 -->
-            <el-submenu index="4" >
+            <el-submenu index="4">
               <template slot="title">
                 <i class="el-icon-s-order"></i>
                 <span>订单管理</span>
               </template>
             </el-submenu>
             <!-- 文章管理 -->
-            <el-submenu index="5" >
+            <el-submenu index="5">
               <template slot="title">
                 <i class="el-icon-s-ticket"></i>
                 <span>文章管理</span>
@@ -78,7 +81,7 @@
             </el-submenu>
 
             <!-- 类别管理 -->
-            <el-submenu index="6" >
+            <el-submenu index="6">
               <template slot="title">
                 <i class="el-icon-s-ticket"></i>
                 <span>类别管理</span>
@@ -93,6 +96,22 @@
                 <span>类别添加</span>
               </el-menu-item>
 
+            </el-submenu>
+
+            <el-submenu index="7">
+              <template slot="title">
+                <i class="el-icon-user"></i>
+                <span>管理员管理</span>
+              </template>
+              <el-menu-item index="/admin/AdminAddNewView.vue">
+                <i class="el-icon-circle-plus"></i>
+                <span>添加管理员</span>
+              </el-menu-item>
+
+              <el-menu-item index="/admin/AdminListView.vue">
+                <i class="el-icon-circle-plus"></i>
+                <span>管理员列表</span>
+              </el-menu-item>
             </el-submenu>
 
           </el-menu>
@@ -111,21 +130,45 @@
 
 
 export default {
-  data(){
-    return{
-      activeMenuItemPath: ''
+  data() {
+    return {
+      activeMenuItemPath: '',
+      isLogin: false
     }
   },
-  methods:{
+  methods: {
+    logOut() {
+      localStorage.removeItem("jwt");
+      this.$message({
+        showClose: true,
+        message: '退出登录成功!',
+        type: 'success'
+      });
+      this.$router.push('/login');
+    },
+    adminIsLogin() {
+      console.log("jwt:",localStorage.getItem("jwt"))
+      if (localStorage.getItem("jwt")!=null) {
+        this.isLogin = true;
+      } else {
+        this.isLogin = false;
+      }
+    }
+
 
   },
   mounted() {
+
     let path = this.$router.currentRoute.path;
     console.log(path);
-    if (path==('/article/ArticleUpdateView.vue')||path==('/article/ArticleListView.vue')) {
+    if (path == ('/article/ArticleUpdateView.vue') || path == ('/article/ArticleListView.vue')) {
       path = '/article/ArticleListView.vue';
     }
     this.activeMenuItemPath = path;
+
+    this.adminIsLogin();
+
+
   }
 }
 </script>

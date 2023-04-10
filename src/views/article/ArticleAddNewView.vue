@@ -127,14 +127,14 @@ export default Vue.extend({//富文本
       rules: {
         title: [
           {required: true, message: '请输入文章标题', trigger: 'blur'},
-          {min: 2, max: 15, message: '长度在 2 到 15 个字符', trigger: 'blur'}
+          {min: 1, max: 30, message: '长度在 2 到 15 个字符', trigger: 'blur'}
         ],
         selectedOptions:[
           {required:false,message:'请选择分类',trigger:'change',type:'array'}
         ],
         description: [
           {required: true, message: '请输入文章简介', trigger: 'blur'},
-          {min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur'}
+          {min: 1, max: 300, message: '长度在 2 到 30 个字符', trigger: 'blur'}
         ],
         sort: [
           {required: true, message: '请输入品牌排序序号', trigger: 'blur'},
@@ -318,6 +318,15 @@ export default Vue.extend({//富文本
       console.log('你将选择的分类id：' + this.selectById + '赋值给了categoryId，现在它的值是：' + this.ruleForm.categoryId)
     },
     submitForm(formName) {
+      console.log("当前的封面图路径",this.file)
+      if (this.file.url === "") {
+        this.$message({
+          showClose: true,
+          message: "必须上传封面图!",
+          type: 'error'
+        });
+        return;
+      }
       // 去重：
       // 属性说明：
       //
@@ -366,7 +375,8 @@ export default Vue.extend({//富文本
               let pictureURI = "http://localhost:10001/articlePictures/add-new";
               let fileData = this.qs.stringify(this.file);
               console.log("图片的信息是:" + fileData);
-              this.axios.post(pictureURI, fileData).then((response) => {
+              this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+                  .post(pictureURI, fileData).then((response) => {
                 let FileResponseData = response.data;
                 console.log("返回的消息是:" + FileResponseData.state)
               })
@@ -375,7 +385,8 @@ export default Vue.extend({//富文本
               // 提交“删除前端瞎几把给服务器上传多余的图片”请求
               let delImgUrl = "http://localhost:10001/articlePictures/deleteUnnecessaryPic";
               console.log("删除多余图片的请求路径：" + delImgUrl)
-              this.axios.post(delImgUrl, this.ContentImg).then((response) => {
+              this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+                  .post(delImgUrl, this.ContentImg).then((response) => {
                 let delImgUrlResponseData = response.data;
                 console.log("提交了删除多余图片的请求，返回的消息是：" + delImgUrlResponseData) //TODO
               })
@@ -386,10 +397,10 @@ export default Vue.extend({//富文本
               });
               this.resetForm(formName);
 
-              // 延迟2秒后刷新页面
+              // 延迟1秒后刷新页面
               setTimeout(() => {
                 location.reload();
-              }, 2000);
+              }, 1000);
 
             } else {
               this.$message.error(responseBody.message);
@@ -411,9 +422,10 @@ export default Vue.extend({//富文本
   }, // methods结束！！！！！！
 
   mounted() {
-    //向后端发送请求(没有jwt验证)
+    //向后端发送请求
     let url = "http://localhost:10001/articleCategories/list-children-by-parent";
-    this.axios.get(url).then((response) => {
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(url).then((response) => {
       let responseBody = response.data;
       var categories = this.getData(responseBody.data);
       this.options = categories;

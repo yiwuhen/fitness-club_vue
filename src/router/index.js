@@ -40,6 +40,18 @@ const routes = [
 
         component: () => import(/* webpackChunkName: "about" */ '../views/category/CategoryAddNewView')
       },
+      {
+        path: '/admin/AdminAddNewView.vue',
+        name: '管理员新增',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/admin/AdminAddNewView.vue')
+      },
+      {
+        path: '/admin/AdminListView.vue',
+        name: '管理员列表',
+
+        component: () => import(/* webpackChunkName: "about" */ '../views/admin/AdminListView.vue')
+      }
 
     ]
   },
@@ -54,7 +66,10 @@ const routes = [
     name: 'about',
 
     component: () => import(/* webpackChunkName: "about" */ '../views/xxx.vue')
-  }
+  },{
+    path: '/login',
+    component: () => import('../views/LoginView.vue')
+  },
 ]
 
 const router = new VueRouter({

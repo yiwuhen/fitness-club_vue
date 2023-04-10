@@ -238,9 +238,10 @@ export default {
 
   },
   mounted() {
-    //向后端发送请求(没有jwt验证)
+    //向后端发送请求
     let url = "http://localhost:10001/articleCategories/list-children-by-parent";
-    this.axios.get(url).then((response) => {
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(url).then((response) => {
       let responseBody = response.data;
 
       var categories = this.getData(responseBody.data);
