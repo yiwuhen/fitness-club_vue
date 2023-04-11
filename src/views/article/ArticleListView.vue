@@ -238,12 +238,13 @@ export default {
 
   },
   mounted() {
+    console.log("开始预加载")
     //向后端发送请求
     let url = "http://localhost:10001/articleCategories/list-children-by-parent";
     this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
         .get(url).then((response) => {
       let responseBody = response.data;
-
+      console.log("查到的级联数据",responseBody.data)
       var categories = this.getData(responseBody.data);
       this.options = categories;
       console.log(this.options);

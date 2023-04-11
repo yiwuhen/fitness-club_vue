@@ -334,7 +334,7 @@ export default Vue.extend({
 
     getData(array) { // 级联选择器-取出分类、添加隐显方法
       for (var i = 0; i < array.length; i++) {
-        if (array[i].children.length < 1) {
+        if (array[i].children.data) {
           array[i].children = undefined;
         } else {
           //遍历元素并判断，挨个添加disabled
@@ -452,6 +452,17 @@ export default Vue.extend({
   },
 
   mounted() {
+    // 加载类别 向后端发送请求
+    let getCategoryUrl = "http://localhost:10001/articleCategories/list-children-by-parent";
+    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
+        .get(getCategoryUrl).then((response) => {
+      let responseBody = response.data;
+
+      var categories = this.getData(responseBody.data);
+      this.options = categories;
+      console.log(this.options);
+
+    })
     // 加载文章
     const article = JSON.parse(this.$route.query.article);
     console.log("【预加载】传过来的文章是：", article);
@@ -503,15 +514,17 @@ export default Vue.extend({
         // })
         const contentImgArray = oldContentImg;
 
-        contentImgArray.forEach(innerArray => {
-          innerArray.forEach(obj => {
-            if (obj && obj.src) {
-              const image = { src: obj.src, alt: undefined, url: obj.src, href: undefined };
-              this.ContentImg.push(image);
-            }
+        if (contentImgArray.data){
+          contentImgArray.forEach(innerArray => {
+            innerArray.forEach(obj => {
+              if (obj && obj.src) {
+                const image = { src: obj.src, alt: undefined, url: obj.src, href: undefined };
+                this.ContentImg.push(image);
+              }
+            });
           });
-        });
-        console.log("【预加载】ContentImg初始化完毕：",this.ContentImg)
+          console.log("【预加载】ContentImg初始化完毕：",this.ContentImg)
+        }
 
     })
     // 加载封面
@@ -532,19 +545,6 @@ export default Vue.extend({
           'url': coverData.url
         })
       }
-    })
-
-
-    // 加载类别 向后端发送请求
-    let getCategoryUrl = "http://localhost:10001/articleCategories/list-children-by-parent";
-    this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
-        .get(getCategoryUrl).then((response) => {
-      let responseBody = response.data;
-
-      var categories = this.getData(responseBody.data);
-      this.options = categories;
-      console.log(this.options);
-
     })
   },
 

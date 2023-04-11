@@ -274,7 +274,7 @@ export default Vue.extend({//富文本
     //////////
     getData(array) {
       for (var i = 0; i < array.length; i++) {
-        if (array[i].children.length < 1) {
+        if (array[i].children.data) {
           array[i].children = undefined;
         } else {
 
@@ -422,6 +422,7 @@ export default Vue.extend({//富文本
   }, // methods结束！！！！！！
 
   mounted() {
+    console.log("开始预加载")
     //向后端发送请求
     let url = "http://localhost:10001/articleCategories/list-children-by-parent";
     this.axios.create({'headers': {'Authorization': localStorage.getItem('jwt')}})
