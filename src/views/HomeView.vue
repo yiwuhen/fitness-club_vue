@@ -173,6 +173,7 @@ export default {
 }
 </script>
 <style>
+
 a, a:visited, a:link, a:hover{
   color:white;
   text-decoration: none;

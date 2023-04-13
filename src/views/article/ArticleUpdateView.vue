@@ -333,21 +333,22 @@ export default Vue.extend({
     },
 
     getData(array) { // 级联选择器-取出分类、添加隐显方法
-      for (var i = 0; i < array.length; i++) {
-        if (array[i].children.data) {
-          array[i].children = undefined;
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].children.length) {
+          array[i].children = this.getData(array[i].children); // 递归调用
         } else {
           //遍历元素并判断，挨个添加disabled
           array = array.map(obj => {
-            if (obj.enable == 1) {
+            if (obj.enable === 1) {
               obj.disabled = false;
             } else {
               obj.disabled = true;
             }
+            console.log("【getData】取出了obj：", obj)
             return obj;
           });
           //遍历结束
-          this.getData(array[i].children);
+          array[i].children = null; // 将 children 设置为空数组
         }
       }
       return array;
